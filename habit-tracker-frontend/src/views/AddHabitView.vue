@@ -1,15 +1,17 @@
 <template>
-  <div class="p-6 max-w-2xl mx-auto">
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">Add New Habit</h1>
-      <p class="text-gray-600 mt-2">Create a new habit to track your progress.</p>
+  <div class="add-habit-container">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="title">Add New Habit</h1>
+      <p class="subtitle">Create a new habit to track your progress.</p>
     </div>
 
-    <form @submit.prevent="addNewHabit" class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-      <div class="space-y-6">
+    <!-- Form -->
+    <form @submit.prevent="addNewHabit" class="habit-form">
+      <div class="form-grid">
         <!-- Habit Title -->
-        <div>
-          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="title" class="form-label">
             Habit Title *
           </label>
           <input
@@ -18,13 +20,13 @@
             type="text"
             required
             placeholder="e.g., Morning Meditation"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
+            class="form-input"
           />
         </div>
 
         <!-- Description -->
-        <div>
-          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="description" class="form-label">
             Description
           </label>
           <textarea
@@ -32,25 +34,23 @@
             v-model="newHabit.description"
             rows="3"
             placeholder="e.g., 10 minutes of mindfulness"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
+            class="form-textarea"
           ></textarea>
         </div>
 
         <!-- Frequency -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label class="form-label">
             Frequency *
           </label>
-          <div class="grid grid-cols-2 gap-3">
+          <div class="frequency-grid">
             <button
               type="button"
               v-for="frequency in frequencies"
               :key="frequency"
               @click="newHabit.frequency = frequency"
-              class="p-3 border rounded-lg text-center transition-colors duration-200"
-              :class="newHabit.frequency === frequency 
-                ? 'border-purple-500 bg-purple-50 text-purple-700' 
-                : 'border-gray-300 hover:border-gray-400'"
+              class="frequency-btn"
+              :class="{ 'frequency-btn-active': newHabit.frequency === frequency }"
             >
               {{ frequency }}
             </button>
@@ -58,8 +58,8 @@
         </div>
 
         <!-- Goal -->
-        <div>
-          <label for="goal" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="goal" class="form-label">
             Daily Goal
           </label>
           <input
@@ -67,26 +67,26 @@
             v-model="newHabit.goal"
             type="text"
             placeholder="e.g., 8 glasses of water"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors duration-200"
+            class="form-input"
           />
         </div>
+      </div>
 
-        <!-- Submit Button -->
-        <div class="flex space-x-4 pt-4">
-          <button
-            type="button"
-            @click="$router.back()"
-            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="flex-1 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors duration-200 font-medium"
-          >
-            Add Habit
-          </button>
-        </div>
+      <!-- Submit Buttons -->
+      <div class="form-actions">
+        <button
+          type="button"
+          @click="$router.back()"
+          class="btn-secondary"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-primary"
+        >
+          Add Habit
+        </button>
       </div>
     </form>
   </div>
@@ -114,3 +114,208 @@ const addNewHabit = () => {
   router.push('/')
 }
 </script>
+
+<style scoped>
+.add-habit-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Header Styles */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Form Styles */
+.habit-form {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-input,
+.form-textarea {
+  padding: 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* Frequency Grid */
+.frequency-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.frequency-btn {
+  padding: 16px 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  background: #f8f9fa;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.frequency-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+  transform: translateY(-1px);
+}
+
+.frequency-btn-active {
+  border-color: #667eea;
+  background: #667eea;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Form Actions */
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #667eea;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #5a6fd8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+  background: #f8f9fa;
+  color: #666;
+  border: 2px solid #e9ecef;
+}
+
+.btn-secondary:hover {
+  background: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .add-habit-container {
+    padding: 20px 16px;
+  }
+  
+  .title {
+    font-size: 28px;
+  }
+  
+  .habit-form {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .frequency-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-habit-container {
+    padding: 16px 12px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .habit-form {
+    padding: 20px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .btn-primary,
+  .btn-secondary {
+    padding: 14px;
+  }
+}
+</style>

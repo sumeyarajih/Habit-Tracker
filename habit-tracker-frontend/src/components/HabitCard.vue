@@ -1,41 +1,43 @@
 <template>
-  <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-100 hover:shadow-md transition-shadow duration-200">
-    <div class="flex items-start justify-between">
-      <div class="flex-1">
-        <div class="flex items-center space-x-3">
+  <div class="habit-card" :class="{ 'habit-card-completed': habit.completed }">
+    <div class="habit-content">
+      <div class="habit-header">
+        <div class="checkbox-container">
           <input 
             type="checkbox" 
             :checked="habit.completed"
             @change="toggleHabit"
-            class="w-5 h-5 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2"
+            class="habit-checkbox"
           />
-          <div>
-            <h3 class="font-semibold text-gray-800" :class="{ 'line-through text-gray-400': habit.completed }">
-              {{ habit.title }}
-            </h3>
-            <p class="text-sm text-gray-500 mt-1">{{ habit.description }}</p>
-          </div>
+          <span class="checkmark"></span>
+        </div>
+        <div class="habit-info">
+          <h3 class="habit-title" :class="{ 'habit-title-completed': habit.completed }">
+            {{ habit.title }}
+          </h3>
+          <p class="habit-description">{{ habit.description }}</p>
+        </div>
+      </div>
+      
+      <div class="habit-footer">
+        <div class="habit-meta">
+          <span class="meta-item streak">
+            <span class="meta-dot streak-dot"></span>
+            {{ habit.streak }} day streak
+          </span>
+          <span class="meta-item frequency">
+            <span class="meta-dot frequency-dot"></span>
+            {{ habit.frequency }}
+          </span>
         </div>
         
-        <div class="flex items-center justify-between mt-4">
-          <div class="flex items-center space-x-4 text-sm text-gray-600">
-            <span class="flex items-center">
-              <span class="w-2 h-2 bg-orange-400 rounded-full mr-1"></span>
-              {{ habit.streak }} day streak
-            </span>
-            <span class="flex items-center">
-              <span class="w-2 h-2 bg-blue-400 rounded-full mr-1"></span>
-              {{ habit.frequency }}
-            </span>
-          </div>
-          
-          <button 
-            @click="deleteHabit"
-            class="text-red-400 hover:text-red-600 transition-colors duration-200 p-1"
-          >
-            🗑️
-          </button>
-        </div>
+        <button 
+          @click="deleteHabit"
+          class="delete-btn"
+          title="Delete habit"
+        >
+          🗑️
+        </button>
       </div>
     </div>
   </div>
@@ -63,3 +65,234 @@ const deleteHabit = () => {
   }
 }
 </script>
+
+<style scoped>
+.habit-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.habit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  transition: all 0.3s ease;
+}
+
+.habit-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+}
+
+.habit-card-completed {
+  opacity: 0.7;
+  background: #f8f9fa;
+}
+
+.habit-card-completed::before {
+  background: linear-gradient(135deg, #10b981, #34d399);
+}
+
+.habit-content {
+  space-y: 16px;
+}
+
+.habit-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Checkbox Styles */
+.checkbox-container {
+  position: relative;
+  margin-top: 2px;
+}
+
+.habit-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.habit-checkbox:checked + .checkmark {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.habit-checkbox:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.habit-checkbox:focus + .checkmark {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Habit Info */
+.habit-info {
+  flex: 1;
+}
+
+.habit-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.habit-title-completed {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.habit-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Habit Footer */
+.habit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.habit-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.streak-dot {
+  background: #f59e0b;
+}
+
+.frequency-dot {
+  background: #3b82f6;
+}
+
+.streak {
+  color: #f59e0b;
+}
+
+.frequency {
+  color: #3b82f6;
+}
+
+/* Delete Button */
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  background: #fef2f2;
+  color: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .habit-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .habit-header {
+    gap: 10px;
+  }
+  
+  .habit-title {
+    font-size: 15px;
+  }
+  
+  .habit-description {
+    font-size: 13px;
+  }
+  
+  .habit-meta {
+    gap: 12px;
+  }
+  
+  .meta-item {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .habit-card {
+    padding: 14px;
+  }
+  
+  .checkmark {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .habit-title {
+    font-size: 14px;
+  }
+  
+  .habit-meta {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+</style>

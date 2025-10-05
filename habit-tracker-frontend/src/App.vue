@@ -1,16 +1,21 @@
 <template>
   <div class="app-container">
-    <!-- Sidebar for desktop - collapsible -->
-    <SideBar :isCollapsed="isSidebarCollapsed" @toggle-collapse="toggleSidebar" class="hidden md:block" />
+    <!-- Sidebar for desktop only -->
+    <SideBar 
+      :isCollapsed="isSidebarCollapsed" 
+      @toggle-collapse="toggleSidebar" 
+      class="hidden md:block fixed left-0 top-0 h-screen z-40" 
+    />
     
     <!-- Mobile bottom navbar -->
-    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50 border-t border-gray-200">
-      <MobileNavBar />
-    </div>
+    <MobileNavBar class="md:hidden fixed bottom-0 left-0 right-0 z-50" />
     
     <!-- Main content -->
-    <main class="flex-1 overflow-y-auto transition-all duration-300" :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'">
-      <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 pb-16 md:pb-0">
+    <main 
+      class="flex-1 overflow-y-auto transition-all duration-300 min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100"
+      :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'"
+    >
+      <div class="pb-16 md:pb-0">
         <router-view />
       </div>
     </main>
@@ -33,5 +38,12 @@ const toggleSidebar = () => {
 .app-container {
   height: 100vh;
   overflow: hidden;
+}
+
+/* Ensure proper scrolling on mobile */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 </style>

@@ -96,6 +96,13 @@ const logout = () => {
   width: 80px;
 }
 
+/* Hide on mobile */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}
+
 /* Sidebar Header */
 .sidebar-header {
   padding: 24px 20px;
@@ -164,9 +171,9 @@ const logout = () => {
   padding: 20px 16px;
 }
 
-/* .nav-list {
+.nav-list {
   space-y: 4px;
-} */
+}
 
 .nav-link {
   display: flex;

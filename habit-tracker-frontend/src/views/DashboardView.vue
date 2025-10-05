@@ -102,9 +102,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-// Mock data - replace with your actual store data
+// Mock data
 const currentStreak = ref(12)
 const completionRate = ref(87)
 const totalHabits = ref(5)
@@ -285,11 +285,6 @@ const todayHabitsCount = ref(3)
   color: white;
   font-size: 12px;
   font-weight: bold;
-}
-
-.checkbox-input:focus + .checkbox-label {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Habit Content */
