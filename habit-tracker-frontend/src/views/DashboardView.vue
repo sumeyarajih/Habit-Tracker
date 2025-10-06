@@ -1,100 +1,58 @@
 <template>
-  <div class="dashboard-container">
-    <!-- Header -->
-    <div class="header-section">
-      <h1 class="greeting-title">Good morning!</h1>
-      <p class="greeting-subtitle">Let's make today productive. You have {{ todayHabitsCount }} habits to complete.</p>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class="stats-section">
-      <div class="stats-grid">
-        <!-- Current Streak -->
-        <div class="stat-card">
-          <div class="stat-header">
-            <h3 class="stat-title">Current Streak</h3>
-            <div class="stat-icon streak-icon">🔥</div>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-container">
+      <!-- Stats Cards -->
+      <div class="stats-section">
+        <div class="stats-grid">
+          <!-- Current Streak -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3 class="stat-title">Current Streak</h3>
+              <div class="stat-icon streak-icon">🔥</div>
+            </div>
+            <p class="stat-value">{{ currentStreak }} days</p>
           </div>
-          <p class="stat-value">{{ currentStreak }} days</p>
-        </div>
 
-        <!-- Completion Rate -->
-        <div class="stat-card">
-          <div class="stat-header">
-            <h3 class="stat-title">Completion Rate</h3>
-            <div class="stat-icon completion-icon">📈</div>
+          <!-- Completion Rate -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3 class="stat-title">Completion Rate</h3>
+              <div class="stat-icon completion-icon">📈</div>
+            </div>
+            <p class="stat-value">{{ completionRate }}%</p>
           </div>
-          <p class="stat-value">{{ completionRate }}%</p>
-        </div>
 
-        <!-- Total Habits -->
-        <div class="stat-card">
-          <div class="stat-header">
-            <h3 class="stat-title">Total Habits</h3>
-            <div class="stat-icon habits-icon">📝</div>
+          <!-- Total Habits -->
+          <div class="stat-card">
+            <div class="stat-header">
+              <h3 class="stat-title">Total Habits</h3>
+              <div class="stat-icon habits-icon">📝</div>
+            </div>
+            <p class="stat-value">{{ totalHabits }}</p>
           </div>
-          <p class="stat-value">{{ totalHabits }}</p>
         </div>
       </div>
-    </div>
 
-    <!-- Today's Habits -->
-    <div class="habits-section">
-      <h2 class="section-title">Today's Habits</h2>
-      
-      <div class="habits-list">
-        <!-- Morning Meditation -->
-        <div class="habit-item">
-          <div class="habit-checkbox">
-            <input type="checkbox" id="meditation" class="checkbox-input">
-            <label for="meditation" class="checkbox-label"></label>
-          </div>
-          <div class="habit-content">
-            <div class="habit-main">
-              <h3 class="habit-title">Morning Meditation</h3>
-              <p class="habit-description">10 minutes of mindfulness</p>
-            </div>
-            <div class="habit-meta">
-              <span class="streak-badge">7 day streak</span>
-              <span class="frequency-badge">Daily</span>
-            </div>
-          </div>
+      <!-- Today's Habits -->
+      <div class="habits-section">
+        <h2 class="section-title">Today's Habits</h2>
+        
+        <div class="habits-list">
+          <HabitCard 
+            v-for="habit in todayHabits" 
+            :key="habit.id" 
+            :habit="habit" 
+          />
         </div>
+      </div>
 
-        <!-- Drink Water -->
-        <div class="habit-item">
-          <div class="habit-checkbox">
-            <input type="checkbox" id="water" class="checkbox-input">
-            <label for="water" class="checkbox-label"></label>
-          </div>
-          <div class="habit-content">
-            <div class="habit-main">
-              <h3 class="habit-title">Drink Water</h3>
-              <p class="habit-description">8 glasses throughout the day</p>
-            </div>
-            <div class="habit-meta">
-              <span class="streak-badge">12 day streak</span>
-              <span class="frequency-badge">Daily</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Read for 30 minutes -->
-        <div class="habit-item">
-          <div class="habit-checkbox">
-            <input type="checkbox" id="reading" class="checkbox-input">
-            <label for="reading" class="checkbox-label"></label>
-          </div>
-          <div class="habit-content">
-            <div class="habit-main">
-              <h3 class="habit-title">Read for 30 minutes</h3>
-              <p class="habit-description">Personal development books</p>
-            </div>
-            <div class="habit-meta">
-              <span class="streak-badge">3 day streak</span>
-              <span class="frequency-badge">Daily</span>
-            </div>
-          </div>
+      <!-- Quote Section -->
+      <div class="quote-section">
+        <div class="quote-card">
+          <p class="quote-text">
+            "Success is the sum of small efforts repeated day in and day out."
+          </p>
+          <p class="quote-author">- Robert Collier</p>
         </div>
       </div>
     </div>
@@ -102,43 +60,81 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import HabitCard from '../components/HabitCard.vue'
 
 // Mock data
 const currentStreak = ref(12)
 const completionRate = ref(87)
 const totalHabits = ref(5)
-const todayHabitsCount = ref(3)
+
+// Today's habits data
+const todayHabits = ref([
+  {
+    id: 1,
+    title: "Morning Meditation",
+    description: "10 minutes of mindfulness",
+    streak: 7,
+    frequency: "Daily",
+    completed: false
+  },
+  {
+    id: 2,
+    title: "Drink Water",
+    description: "8 glasses throughout the day",
+    streak: 12,
+    frequency: "Daily",
+    completed: true
+  },
+  {
+    id: 3,
+    title: "Read for 30 minutes",
+    description: "Personal development books",
+    streak: 3,
+    frequency: "Daily",
+    completed: false
+  },
+  {
+    id: 4,
+    title: "Exercise",
+    description: "30 minutes of workout",
+    streak: 5,
+    frequency: "Daily",
+    completed: false
+  },
+  {
+    id: 5,
+    title: "Journaling",
+    description: "Write daily reflections",
+    streak: 8,
+    frequency: "Daily",
+    completed: true
+  },
+  {
+    id: 6,
+    title: "Learn Spanish",
+    description: "15 minutes of language practice",
+    streak: 15,
+    frequency: "Daily",
+    completed: false
+  }
+])
 </script>
 
 <style scoped>
+/* Full page wrapper with background */
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #faf5ff 100%);
+  overflow-y: auto;
+}
+
+/* Main container */
 .dashboard-container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px 20px;
+  padding: 20px;
   min-height: 100vh;
-}
-
-/* Header Section */
-.header-section {
-  text-align: center;
-  margin-bottom: 40px;
-  padding-top: 20px;
-}
-
-.greeting-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.greeting-subtitle {
-  font-size: 16px;
-  color: #6b7280;
-  margin: 0;
-  font-weight: 400;
 }
 
 /* Stats Section */
@@ -156,14 +152,15 @@ const todayHabitsCount = ref(3)
   background: white;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 25px rgba(109, 40, 217, 0.15);
+  border: 1px solid #e9d5ff;
   transition: all 0.3s ease;
+  width: 200px
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 35px rgba(109, 40, 217, 0.25);
 }
 
 .stat-header {
@@ -176,7 +173,7 @@ const todayHabitsCount = ref(3)
 .stat-title {
   font-size: 14px;
   font-weight: 600;
-  color: #6b7280;
+  color: #6d28d9;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
@@ -190,6 +187,7 @@ const todayHabitsCount = ref(3)
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .streak-icon {
@@ -220,136 +218,64 @@ const todayHabitsCount = ref(3)
 .section-title {
   font-size: 24px;
   font-weight: 600;
-  color: #1f2937;
+  color: #6d28d9;
   margin: 0 0 24px 0;
+  text-align: center;
 }
 
 .habits-list {
-  space-y: 16px;
-}
-
-.habit-item {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f3f4f6;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  transition: all 0.2s ease;
-}
-
-.habit-item:hover {
-  border-color: #e5e7eb;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Checkbox Styles */
-.habit-checkbox {
-  position: relative;
-  margin-top: 2px;
-}
-
-.checkbox-input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkbox-label {
-  display: block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #d1d5db;
-  border-radius: 6px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: white;
-}
-
-.checkbox-input:checked + .checkbox-label {
-  background: #10b981;
-  border-color: #10b981;
-}
-
-.checkbox-input:checked + .checkbox-label::after {
-  content: '✓';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Habit Content */
-.habit-content {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-}
-
-.habit-main {
-  flex: 1;
-}
-
-.habit-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 4px 0;
-  line-height: 1.4;
-}
-
-.habit-description {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.4;
-}
-
-.habit-meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  align-items: flex-end;
+  gap: 16px;
 }
 
-.streak-badge,
-.frequency-badge {
-  font-size: 12px;
+/* Quote Section */
+.quote-section {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.quote-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 30px rgba(109, 40, 217, 0.2);
+  border: 1px solid #e9d5ff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+}
+
+.quote-text {
+  font-size: 18px;
   font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 12px;
-  white-space: nowrap;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+  font-style: italic;
 }
 
-.streak-badge {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.frequency-badge {
-  background: #dbeafe;
-  color: #1e40af;
+.quote-author {
+  font-size: 14px;
+  color: #6d28d9;
+  margin: 0;
+  font-weight: 600;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .dashboard-container {
     padding: 16px;
-    padding-bottom: 80px; /* Space for bottom navbar */
-  }
-
-  .greeting-title {
-    font-size: 28px;
   }
 
   .stats-grid {
@@ -369,31 +295,18 @@ const todayHabitsCount = ref(3)
     font-size: 20px;
   }
 
-  .habit-item {
-    padding: 16px;
+  .quote-card {
+    padding: 24px;
   }
 
-  .habit-content {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .habit-meta {
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
+  .quote-text {
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-container {
     padding: 12px;
-    padding-bottom: 80px;
-  }
-
-  .greeting-title {
-    font-size: 24px;
   }
 
   .stat-card {
@@ -404,16 +317,42 @@ const todayHabitsCount = ref(3)
     font-size: 24px;
   }
 
-  .habit-item {
-    padding: 12px;
+  .quote-card {
+    padding: 20px;
   }
 
-  .habit-title {
+  .quote-text {
     font-size: 15px;
   }
+}
 
-  .habit-description {
-    font-size: 13px;
-  }
+/* Custom Scrollbar for the entire page */
+.dashboard-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dashboard-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.dashboard-wrapper::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 4px;
+}
+
+.dashboard-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}
+
+/* Firefox scrollbar */
+.dashboard-wrapper {
+  scrollbar-width: thin;
+  scrollbar-color: #c4b5fd #f1f5f9;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
 }
 </style>

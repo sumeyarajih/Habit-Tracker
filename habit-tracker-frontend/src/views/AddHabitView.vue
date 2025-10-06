@@ -19,56 +19,41 @@
             v-model="newHabit.title"
             type="text"
             required
-            placeholder="e.g., Morning Meditation"
+            placeholder="e.g., Drink 8 glasses of water"
             class="form-input"
           />
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="category" class="form-label">
+            Category
+          </label>
+          <select
+            id="category"
+            v-model="newHabit.category"
+            class="form-select"
+          >
+            <option value="Health">Health</option>
+            <option value="Fitness">Fitness</option>
+            <option value="Productivity">Productivity</option>
+            <option value="Learning">Learning</option>
+            <option value="Other">Other</option>
+          </select>
         </div>
 
         <!-- Description -->
         <div class="form-group">
           <label for="description" class="form-label">
-            Description
+            Description (Optional)
           </label>
           <textarea
             id="description"
             v-model="newHabit.description"
             rows="3"
-            placeholder="e.g., 10 minutes of mindfulness"
+            placeholder="Add any notes or details about this habit"
             class="form-textarea"
           ></textarea>
-        </div>
-
-        <!-- Frequency -->
-        <div class="form-group">
-          <label class="form-label">
-            Frequency *
-          </label>
-          <div class="frequency-grid">
-            <button
-              type="button"
-              v-for="frequency in frequencies"
-              :key="frequency"
-              @click="newHabit.frequency = frequency"
-              class="frequency-btn"
-              :class="{ 'frequency-btn-active': newHabit.frequency === frequency }"
-            >
-              {{ frequency }}
-            </button>
-          </div>
-        </div>
-
-        <!-- Goal -->
-        <div class="form-group">
-          <label for="goal" class="form-label">
-            Daily Goal
-          </label>
-          <input
-            id="goal"
-            v-model="newHabit.goal"
-            type="text"
-            placeholder="e.g., 8 glasses of water"
-            class="form-input"
-          />
         </div>
       </div>
 
@@ -100,13 +85,10 @@ import { useHabitsStore } from '../stores/habits'
 const router = useRouter()
 const habitsStore = useHabitsStore()
 
-const frequencies = ['Daily', 'Weekly', 'Monthly']
-
 const newHabit = ref({
   title: '',
-  description: '',
-  frequency: 'Daily',
-  goal: ''
+  category: 'Health',
+  description: ''
 })
 
 const addNewHabit = () => {
@@ -121,7 +103,8 @@ const addNewHabit = () => {
   margin: 0 auto;
   padding: 24px 20px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f5f3ff; /* Light purple background */
+  overflow-y: auto;
 }
 
 /* Header Styles */
@@ -133,14 +116,13 @@ const addNewHabit = () => {
 .title {
   font-size: 32px;
   font-weight: 700;
-  color: white;
+  color: #6d28d9; /* Purple color */
   margin: 0 0 8px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #7c3aed; /* Lighter purple */
   margin: 0;
   font-weight: 400;
 }
@@ -148,10 +130,10 @@ const addNewHabit = () => {
 /* Form Styles */
 .habit-form {
   background: white;
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 25px rgba(109, 40, 217, 0.15); /* Purple shadow */
+  border: 1px solid #e9d5ff;
 }
 
 .form-grid {
@@ -169,28 +151,30 @@ const addNewHabit = () => {
 .form-label {
   font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #6d28d9; /* Purple color */
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .form-input,
-.form-textarea {
+.form-textarea,
+.form-select {
   padding: 16px;
-  border: 2px solid #e9ecef;
+  border: 2px solid #e9d5ff; /* Light purple border */
   border-radius: 12px;
   font-size: 16px;
   transition: all 0.2s ease;
-  background: #f8f9fa;
+  background: white;
+  box-shadow: 0 2px 5px rgba(109, 40, 217, 0.05);
 }
 
 .form-input:focus,
-.form-textarea:focus {
+.form-textarea:focus,
+.form-select:focus {
   outline: none;
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #8b5cf6; /* Medium purple */
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 .form-textarea {
@@ -199,37 +183,13 @@ const addNewHabit = () => {
   font-family: inherit;
 }
 
-/* Frequency Grid */
-.frequency-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.frequency-btn {
-  padding: 16px 12px;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  background: #f8f9fa;
-  font-size: 14px;
-  font-weight: 500;
-  color: #666;
+.form-select {
   cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.frequency-btn:hover {
-  border-color: #667eea;
-  color: #667eea;
-  transform: translateY(-1px);
-}
-
-.frequency-btn-active {
-  border-color: #667eea;
-  background: #667eea;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236d28d9'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 20px;
 }
 
 /* Form Actions */
@@ -238,7 +198,7 @@ const addNewHabit = () => {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   padding-top: 24px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid #f3e8ff;
 }
 
 .btn-primary,
@@ -250,28 +210,30 @@ const addNewHabit = () => {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .btn-primary {
-  background: #667eea;
+  background: #7c3aed; /* Purple */
   color: white;
 }
 
 .btn-primary:hover {
-  background: #5a6fd8;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background: #6d28d9; /* Darker purple */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(109, 40, 217, 0.2);
 }
 
 .btn-secondary {
-  background: #f8f9fa;
-  color: #666;
-  border: 2px solid #e9ecef;
+  background: white;
+  color: #7c3aed;
+  border: 2px solid #ddd6fe;
 }
 
 .btn-secondary:hover {
-  background: #e9ecef;
-  transform: translateY(-1px);
+  background: #f5f3ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(109, 40, 217, 0.1);
 }
 
 /* Responsive Design */
@@ -286,11 +248,7 @@ const addNewHabit = () => {
   
   .habit-form {
     padding: 24px;
-    border-radius: 16px;
-  }
-  
-  .frequency-grid {
-    grid-template-columns: 1fr;
+    border-radius: 12px;
   }
   
   .form-actions {
@@ -313,6 +271,7 @@ const addNewHabit = () => {
   
   .form-input,
   .form-textarea,
+  .form-select,
   .btn-primary,
   .btn-secondary {
     padding: 14px;

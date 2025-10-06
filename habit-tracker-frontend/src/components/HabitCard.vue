@@ -71,7 +71,7 @@ const deleteHabit = () => {
   background: white;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(109, 40, 217, 0.15);
   border: 2px solid transparent;
   transition: all 0.3s ease;
   position: relative;
@@ -85,19 +85,19 @@ const deleteHabit = () => {
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
   transition: all 0.3s ease;
 }
 
 .habit-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: #667eea;
+  box-shadow: 0 12px 35px rgba(109, 40, 217, 0.25);
+  border-color: #8b5cf6;
 }
 
 .habit-card-completed {
   opacity: 0.7;
-  background: #f8f9fa;
+  background: #faf5ff;
 }
 
 .habit-card-completed::before {
@@ -105,7 +105,9 @@ const deleteHabit = () => {
 }
 
 .habit-content {
-  space-y: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .habit-header {
@@ -156,8 +158,8 @@ const deleteHabit = () => {
 }
 
 .habit-checkbox:focus + .checkmark {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
 /* Habit Info */
@@ -217,7 +219,7 @@ const deleteHabit = () => {
 }
 
 .frequency-dot {
-  background: #3b82f6;
+  background: #8b5cf6; /* Purple color */
 }
 
 .streak {
@@ -225,7 +227,7 @@ const deleteHabit = () => {
 }
 
 .frequency {
-  color: #3b82f6;
+  color: #8b5cf6; /* Purple color */
 }
 
 /* Delete Button */
@@ -293,6 +295,16 @@ const deleteHabit = () => {
     flex-direction: column;
     gap: 8px;
     align-items: flex-start;
+  }
+  
+  .habit-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .delete-btn {
+    align-self: flex-end;
   }
 }
 </style>

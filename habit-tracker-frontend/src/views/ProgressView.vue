@@ -138,9 +138,9 @@ const habitsStore = useHabitsStore()
 }
 
 /* Habits Progress */
-.habits-progress {
+/* .habits-progress {
   space-y: 16px;
-}
+} */
 
 .habit-progress-item {
   display: flex;

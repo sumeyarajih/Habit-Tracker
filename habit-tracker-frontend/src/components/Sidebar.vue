@@ -1,18 +1,17 @@
 <template>
   <aside class="sidebar" :class="{ 'sidebar-collapsed': isCollapsed }">
-    <!-- Logo / App Name -->
-    <div class="sidebar-header">
-      <div class="logo" :class="{ 'logo-collapsed': isCollapsed }">
-        <div class="logo-icon">H</div>
-        <span v-if="!isCollapsed" class="logo-text">HabitFlow</span>
+    <!-- Logo Section -->
+   <div class="logo-section">
+    <div class="logo-content" :class="{ 'logo-collapsed': isCollapsed }">
+      <!-- Updated: Using absolute path to public folder -->
+      <img src="/habit-logo.png" alt="HabitFlow Logo" class="logo-image" />
+
+      <div v-if="!isCollapsed" class="logo-info">
+        <h3 class="logo-name">HabitFlow</h3>
+        <p class="logo-tagline">Build Better Habits</p>
       </div>
-      <button @click="$emit('toggle-collapse')" class="collapse-btn">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path v-if="!isCollapsed" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
     </div>
+  </div>
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
@@ -103,16 +102,14 @@ const logout = () => {
   }
 }
 
-/* Sidebar Header */
-.sidebar-header {
+/* Logo Section */
+.logo-section {
   padding: 24px 20px;
   border-bottom: 1px solid #f3f4f6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.logo {
+.logo-content {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -123,46 +120,40 @@ const logout = () => {
   justify-content: center;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.logo-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.logo-info {
   color: white;
+}
+
+.logo-name {
+  font-size: 18px;
   font-weight: 700;
-  font-size: 16px;
-  flex-shrink: 0;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
 }
 
-.logo-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1f2937;
-  white-space: nowrap;
+.logo-tagline {
+  font-size: 12px;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 400;
 }
 
-.collapse-btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  color: #6b7280;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.collapse-btn:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-  color: #374151;
+.sidebar-collapsed .logo-info {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
 
 /* Navigation */
@@ -171,9 +162,9 @@ const logout = () => {
   padding: 20px 16px;
 }
 
-.nav-list {
+/* .nav-list {
   space-y: 4px;
-}
+} */
 
 .nav-link {
   display: flex;

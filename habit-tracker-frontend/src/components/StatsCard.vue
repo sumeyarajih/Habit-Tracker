@@ -4,15 +4,18 @@
       <div class="stats-text">
         <p class="stats-title">{{ title }}</p>
         <p class="stats-value">{{ value }}</p>
+        <div v-if="trend" class="stats-trend">
+          <span class="trend-icon">{{ trendIcon }}</span>
+          <span class="trend-text">{{ trend }}</span>
+        </div>
       </div>
       <div class="stats-icon">
         <span>{{ icon }}</span>
       </div>
     </div>
     
-    <div v-if="trend" class="stats-trend">
-      <span class="trend-icon">{{ trendIcon }}</span>
-      <span class="trend-text">{{ trend }}</span>
+    <div v-if="description" class="stats-description">
+      <p>{{ description }}</p>
     </div>
   </div>
 </template>
@@ -46,6 +49,10 @@ const props = defineProps({
   trendIcon: {
     type: String,
     default: '↗️'
+  },
+  description: {
+    type: String,
+    default: ''
   }
 })
 </script>
@@ -54,14 +61,19 @@ const props = defineProps({
 .stats-card {
   background: white;
   border-radius: 20px;
-  padding: 24px;
+  padding: 28px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  min-width: 320px;
+  width: 500px;    /* 👈 Set exact width */
+  max-width: 600px; /* 👈 Optional: allow bigger cards */
+  height: fit-content;
 }
+
 
 .stats-card::before {
   content: '';
@@ -82,11 +94,12 @@ const props = defineProps({
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .stats-text {
   flex: 1;
+  min-width: 0;
 }
 
 .stats-title {
@@ -99,37 +112,53 @@ const props = defineProps({
 }
 
 .stats-value {
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   color: #1a1a1a;
-  margin: 0;
+  margin: 0 0 12px 0;
   line-height: 1;
 }
 
 .stats-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-left: 16px;
 }
 
 .stats-trend {
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
+  margin-top: 4px;
 }
 
 .trend-icon {
-  margin-right: 4px;
+  margin-right: 6px;
   font-size: 14px;
 }
 
 .trend-text {
   font-weight: 600;
+}
+
+.stats-description {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.stats-description p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
 }
 
 /* Color Variants */
@@ -191,8 +220,28 @@ const props = defineProps({
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .stats-card {
+    min-width: 280px;
+    max-width: 320px;
+    padding: 24px;
+  }
+  
+  .stats-value {
+    font-size: 32px;
+  }
+  
+  .stats-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+}
+
 @media (max-width: 768px) {
   .stats-card {
+    min-width: 240px;
+    max-width: 280px;
     padding: 20px;
     border-radius: 16px;
   }
@@ -202,25 +251,35 @@ const props = defineProps({
   }
   
   .stats-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .stats-content {
+    margin-bottom: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .stats-card {
-    padding: 16px;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 20px;
   }
   
   .stats-value {
-    font-size: 24px;
+    font-size: 26px;
   }
   
   .stats-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  
+  .stats-title {
+    font-size: 13px;
   }
 }
 </style>
