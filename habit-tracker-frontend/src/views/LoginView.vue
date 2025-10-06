@@ -3,13 +3,6 @@
     <div class="login-card">
       <!-- Logo Section -->
       <div class="logo-section">
-        <div class="logo">
-          <!-- Replace with your actual logo -->
-          <div class="logo-placeholder">
-            <span class="logo-icon">🎓</span>
-            <span class="logo-text">EduSystem</span>
-          </div>
-        </div>
         <h1 class="welcome-title">Welcome Back</h1>
         <p class="welcome-subtitle">Sign in to access your school account</p>
       </div>
@@ -40,20 +33,13 @@
           <input
             id="password"
             v-model="form.password"
-            :type="showPassword ? 'text' : 'password'"
+            type="password"
             required
             placeholder="Enter your password"
             class="form-input"
             :class="{ 'error': errors.password }"
             @input="clearError('password')"
           />
-          <button
-            type="button"
-            class="password-toggle"
-            @click="showPassword = !showPassword"
-          >
-            {{ showPassword ? '🙈' : '👁️' }}
-          </button>
           <div v-if="errors.password" class="error-message">
             {{ errors.password }}
           </div>
@@ -71,7 +57,7 @@
             Remember me
           </label>
           <router-link to="/forgot-password" class="forgot-link">
-            Forgot password?
+            Forget password?
           </router-link>
         </div>
 
@@ -107,16 +93,6 @@
           </span>
           <span v-else>Sign In</span>
         </button>
-
-        <!-- Sign Up Link -->
-        <div class="signup-section">
-          <p class="signup-text">
-            Don't have an account? 
-            <router-link to="/signup" class="signup-link">
-              Sign up here
-            </router-link>
-          </p>
-        </div>
       </form>
     </div>
   </div>
@@ -137,7 +113,6 @@ const form = reactive({
 })
 
 // UI state
-const showPassword = ref(false)
 const loading = ref(false)
 
 // Error handling
@@ -165,7 +140,7 @@ const validateForm = () => {
 
   // Email validation
   if (!form.email) {
-    errors.email = 'Email is required'
+    errors.email = 'Please fill out this field.'
     isValid = false
   } else if (!/\S+@\S+\.\S+/.test(form.email)) {
     errors.email = 'Please enter a valid email address'
@@ -174,7 +149,7 @@ const validateForm = () => {
 
   // Password validation
   if (!form.password) {
-    errors.password = 'Password is required'
+    errors.password = 'Please fill out this field.'
     isValid = false
   } else if (form.password.length < 6) {
     errors.password = 'Password must be at least 6 characters'
@@ -201,8 +176,21 @@ const handleLogin = async () => {
     
     // Check credentials (in real app, this would be an API call)
     if (form.email === validCredentials.email && form.password === validCredentials.password) {
-      // Successful login
+      // Store authentication state
+      localStorage.setItem('isAuthenticated', 'true')
+      localStorage.setItem('userEmail', form.email)
+      
+      // Store remember me preference
+      if (form.rememberMe) {
+        localStorage.setItem('rememberMe', 'true')
+        localStorage.setItem('savedEmail', form.email)
+      } else {
+        localStorage.removeItem('savedEmail')
+      }
+      
       console.log('Login successful')
+      
+      // Navigate to dashboard
       router.push('/dashboard')
     } else {
       // Invalid credentials
@@ -210,9 +198,17 @@ const handleLogin = async () => {
     }
   } catch (error) {
     errors.email = 'An error occurred. Please try again.'
+    console.error('Login error:', error)
   } finally {
     loading.value = false
   }
+}
+
+// Check for saved email on component mount
+const savedEmail = localStorage.getItem('savedEmail')
+if (savedEmail) {
+  form.email = savedEmail
+  form.rememberMe = true
 }
 </script>
 
@@ -228,12 +224,11 @@ const handleLogin = async () => {
 
 .login-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 440px;
-  position: relative;
+  max-width: 420px;
 }
 
 /* Logo Section */
@@ -242,99 +237,62 @@ const handleLogin = async () => {
   margin-bottom: 32px;
 }
 
-.logo-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.logo-icon {
-  font-size: 32px;
-}
-
-.logo-text {
-  font-size: 24px;
-  font-weight: 700;
-  color: #4f46e5;
-}
-
 .welcome-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 600;
   color: #1f2937;
   margin: 0 0 8px 0;
 }
 
 .welcome-subtitle {
-  font-size: 16px;
+  font-size: 14px;
   color: #6b7280;
   margin: 0;
 }
 
 /* Form Styles */
-/* .login-form {
-  space-y: 24px;
-} */
-
 .form-group {
-  position: relative;
+  margin-bottom: 20px;
 }
 
 .form-label {
   display: block;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   color: #374151;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .form-input {
   width: 100%;
-  padding: 16px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 16px;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
   transition: all 0.2s ease;
-  background: #f9fafb;
+  background: white;
   box-sizing: border-box;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #4f46e5;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .form-input.error {
   border-color: #ef4444;
-  background: #fef2f2;
 }
 
-.password-toggle {
-  position: absolute;
-  right: 12px;
-  top: 42px;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background 0.2s ease;
-}
-
-.password-toggle:hover {
-  background: #f3f4f6;
+.form-input::placeholder {
+  color: #9ca3af;
 }
 
 .error-message {
   color: #ef4444;
-  font-size: 14px;
-  margin-top: 8px;
-  font-weight: 500;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 400;
 }
 
 /* Form Options */
@@ -352,6 +310,7 @@ const handleLogin = async () => {
   cursor: pointer;
   font-size: 14px;
   color: #374151;
+  font-weight: 400;
 }
 
 .checkbox-input {
@@ -359,46 +318,45 @@ const handleLogin = async () => {
 }
 
 .checkmark {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #d1d5db;
-  border-radius: 4px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  background: white;
 }
 
 .checkbox-input:checked + .checkmark {
-  background: #4f46e5;
-  border-color: #4f46e5;
+  background: #3b82f6;
+  border-color: #3b82f6;
 }
 
 .checkbox-input:checked + .checkmark::after {
   content: '✓';
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
 }
 
 .forgot-link {
-  color: #4f46e5;
+  color: #3b82f6;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  font-weight: 400;
 }
 
 .forgot-link:hover {
-  color: #3730a3;
   text-decoration: underline;
 }
 
 /* CAPTCHA Section */
 .captcha-section {
   background: #f8fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
   padding: 16px;
   margin: 24px 0;
 }
@@ -420,7 +378,7 @@ const handleLogin = async () => {
   gap: 12px;
   cursor: pointer;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 4px;
   transition: background 0.2s ease;
 }
 
@@ -429,12 +387,12 @@ const handleLogin = async () => {
 }
 
 .captcha-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .captcha-text {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   color: #374151;
 }
 
@@ -447,35 +405,32 @@ const handleLogin = async () => {
 }
 
 .captcha-terms {
-  font-size: 12px;
+  font-size: 11px;
   color: #6b7280;
 }
 
 /* Login Button */
 .login-button {
   width: 100%;
-  padding: 16px;
-  background: #4f46e5;
+  padding: 12px 16px;
+  background: #3b82f6;
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin: 16px 0;
+  margin-top: 8px;
 }
 
 .login-button:hover:not(:disabled) {
-  background: #4338ca;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  background: #2563eb;
 }
 
 .login-button:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .button-loading {
@@ -486,8 +441,8 @@ const handleLogin = async () => {
 }
 
 .spinner {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid transparent;
   border-top: 2px solid white;
   border-radius: 50%;
@@ -499,61 +454,25 @@ const handleLogin = async () => {
   100% { transform: rotate(360deg); }
 }
 
-/* Sign Up Section */
-.signup-section {
-  text-align: center;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
-}
-
-.signup-text {
-  color: #6b7280;
-  font-size: 14px;
-  margin: 0;
-}
-
-.signup-link {
-  color: #4f46e5;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-
-.signup-link:hover {
-  color: #3730a3;
-  text-decoration: underline;
-}
-
 /* Responsive Design */
 @media (max-width: 480px) {
   .login-container {
     padding: 16px;
-    align-items: flex-start;
-    padding-top: 40px;
   }
 
   .login-card {
-    padding: 24px;
-    border-radius: 16px;
+    padding: 32px 24px;
+    border-radius: 8px;
   }
 
   .welcome-title {
-    font-size: 24px;
-  }
-
-  .logo-text {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .form-options {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
-  }
-
-  .form-input {
-    padding: 14px;
   }
 }
 </style>

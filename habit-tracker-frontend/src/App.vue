@@ -1,41 +1,52 @@
 <template>
   <div class="app-container">
-    <!-- Sidebar for desktop - collapsible -->
-    <SideBar 
-      :isCollapsed="isSidebarCollapsed" 
-      @toggle-collapse="toggleSidebar" 
-      class="hidden md:block fixed left-0 top-0 h-screen z-40" 
-    />
-    
-    <!-- Mobile bottom navbar -->
-    <MobileNavBar class="md:hidden fixed bottom-0 left-0 right-0 z-50" />
-    
-    <!-- Main content -->
-    <main 
-      class="flex-1 transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100"
-      :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'"
-    >
-      <!-- Header -->
-      <Header 
-        :isSidebarCollapsed="isSidebarCollapsed"
-        @toggle-sidebar="toggleSidebar" 
+    <!-- Only show sidebar and header on authenticated routes -->
+    <template v-if="showLayout">
+      <SideBar 
+        :isCollapsed="isSidebarCollapsed" 
+        @toggle-collapse="toggleSidebar" 
+        class="hidden md:block fixed left-0 top-0 h-screen z-40" 
       />
       
-      <!-- Router view with proper scrolling -->
-      <div class="router-content">
-        <router-view />
-      </div>
-    </main>
+      <MobileNavBar class="md:hidden fixed bottom-0 left-0 right-0 z-50" />
+      
+      <main 
+        class="flex-1 transition-all duration-300 bg-gradient-to-br from-blue-50 to-indigo-100"
+        :class="isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'"
+      >
+        <Header 
+          :isSidebarCollapsed="isSidebarCollapsed"
+          @toggle-sidebar="toggleSidebar" 
+        />
+        
+        <div class="router-content">
+          <router-view />
+        </div>
+      </main>
+    </template>
+    
+    <!-- Full page for login/signup pages -->
+    <template v-else>
+      <router-view />
+    </template>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import SideBar from './components/Sidebar.vue'
 import MobileNavBar from './components/MobileNavBar.vue'
 import Header from './components/Header.vue'
 
+const route = useRoute()
 const isSidebarCollapsed = ref(false)
+
+// Define which routes should show the full layout (authenticated routes)
+const showLayout = computed(() => {
+  const noLayoutRoutes = ['/', '/login', '/signup', '/forgot-password']
+  return !noLayoutRoutes.includes(route.path)
+})
 
 const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value
@@ -49,31 +60,52 @@ const toggleSidebar = () => {
   overflow: hidden;
 }
 
-/* Main content area */
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
 }
 
-/* Router content area - this is where scrolling happens */
 .router-content {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 80px; /* Space for mobile nav */
+  overflow-x: hidden;
+  padding-bottom: 80px;
+  height: calc(100vh - 80px); /* Adjust based on header height */
 }
 
-/* Remove the old pb-16 class from the template */
+/* Fix for mobile navbar space */
+@media (max-width: 768px) {
+  .router-content {
+    padding-bottom: 80px; /* Space for mobile navbar */
+  }
+}
+
+/* For desktop */
+@media (min-width: 769px) {
+  .router-content {
+    padding-bottom: 20px; /* Less space needed on desktop */
+  }
+}
 </style>
 
 <style>
 /* Global styles */
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden; /* Prevent double scrollbars */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#app {
+  height: 100%;
 }
 
 /* Custom scrollbar for the entire app */
@@ -89,6 +121,7 @@ html, body {
 .router-content::-webkit-scrollbar-thumb {
   background: #c4b5fd;
   border-radius: 4px;
+  transition: background 0.3s ease;
 }
 
 .router-content::-webkit-scrollbar-thumb:hover {
@@ -99,5 +132,27 @@ html, body {
 .router-content {
   scrollbar-width: thin;
   scrollbar-color: #c4b5fd #f1f5f9;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure proper scrolling on mobile */
+@media (max-width: 768px) {
+  .router-content {
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  }
+}
+
+/* Remove default focus outlines and add custom ones */
+*:focus {
+  outline: none;
+}
+
+.focus-visible:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
 }
 </style>
