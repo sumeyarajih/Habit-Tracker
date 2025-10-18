@@ -1,23 +1,16 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <!-- Left Section - Menu Button -->
+      <!-- Left Section - Menu Button (Only on mobile) -->
       <div class="header-left">
         <button 
+          v-if="isMobile"
           @click="$emit('toggle-sidebar')"
           class="menu-btn"
           aria-label="Toggle sidebar"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path 
-              v-if="!isSidebarCollapsed"
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M6 18L18 6M6 6l12 12"
-            />
-            <path 
-              v-else
               stroke-linecap="round" 
               stroke-linejoin="round" 
               stroke-width="2" 
@@ -26,8 +19,8 @@
           </svg>
         </button>
         
-        <!-- App Name - Hidden on mobile -->
-        <h1 class="app-name hidden md:block">HabitFlow</h1>
+        <!-- App Name -->
+        <!-- <h1 class="app-name">HabitFlow</h1> -->
       </div>
 
       <!-- Right Section - Notification & Profile -->
@@ -60,7 +53,7 @@
 
 <script setup>
 defineProps({
-  isSidebarCollapsed: {
+  isMobile: {
     type: Boolean,
     default: false
   }
@@ -76,13 +69,15 @@ defineEmits(['toggle-sidebar'])
   position: sticky;
   top: 0;
   z-index: 30;
+  height: 70px;
 }
 
 .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 0 20px;
+  height: 100%;
   max-width: 100%;
 }
 
@@ -181,7 +176,7 @@ defineEmits(['toggle-sidebar'])
 /* Responsive Design */
 @media (max-width: 768px) {
   .header-content {
-    padding: 12px 16px;
+    padding: 0 16px;
   }
 
   .menu-btn,
@@ -201,11 +196,15 @@ defineEmits(['toggle-sidebar'])
     width: 6px;
     height: 6px;
   }
+  
+  .app-name {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
   .header-content {
-    padding: 10px 12px;
+    padding: 0 12px;
   }
 
   .header-left {
@@ -214,6 +213,10 @@ defineEmits(['toggle-sidebar'])
 
   .header-right {
     gap: 12px;
+  }
+  
+  .app-name {
+    font-size: 16px;
   }
 }
 </style>

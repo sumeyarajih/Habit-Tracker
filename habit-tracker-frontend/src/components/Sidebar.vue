@@ -1,49 +1,53 @@
 <template>
-  <aside class="sidebar" :class="{ 'sidebar-collapsed': isCollapsed }">
-    <!-- Logo Section -->
-   <div class="logo-section">
-    <div class="logo-content" :class="{ 'logo-collapsed': isCollapsed }">
-      <!-- Updated: Using absolute path to public folder -->
-      <img src="/habit-logo.png" alt="HabitFlow Logo" class="logo-image" />
-
-      <div v-if="!isCollapsed" class="logo-info">
-        <h3 class="logo-name">HabitFlow</h3>
-        <p class="logo-tagline">Build Better Habits</p>
+  <aside class="sidebar" :class="{ 'sidebar-mobile': isMobile }">
+    <!-- Overlay for mobile -->
+    <div 
+      v-if="isMobile && isSidebarOpen" 
+      class="sidebar-overlay" 
+      @click="$emit('toggle-sidebar')"
+    ></div>
+    
+    <!-- Sidebar Content -->
+    <div class="sidebar-content" :class="{ 'sidebar-open': isSidebarOpen }">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <div class="logo-content">
+          <img src="/habit-logo.png" alt="HabitFlow Logo" class="logo-image" />
+          <div class="logo-info">
+            <h3 class="logo-name">HabitFlow</h3>
+            <p class="logo-tagline">Build Better Habits</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <ul class="nav-list">
-        <li v-for="item in navItems" :key="item.name">
-          <router-link
-            :to="item.path"
-            class="nav-link"
-            :class="{ 
-              'nav-link-active': $route.path === item.path,
-              'nav-link-collapsed': isCollapsed
-            }"
-            :title="isCollapsed ? item.name : ''"
-          >
-            <span class="nav-icon">{{ item.icon }}</span>
-            <span v-if="!isCollapsed" class="nav-text">{{ item.name }}</span>
-          </router-link>
-        </li>
-      </ul>
-    </nav>
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <ul class="nav-list">
+          <li v-for="item in navItems" :key="item.name">
+            <router-link
+              :to="item.path"
+              class="nav-link"
+              :class="{ 'nav-link-active': $route.path === item.path }"
+              @click="isMobile && $emit('toggle-sidebar')"
+            >
+              <span class="nav-icon">{{ item.icon }}</span>
+              <span class="nav-text">{{ item.name }}</span>
+            </router-link>
+          </li>
+        </ul>
+      </nav>
 
-    <!-- Logout -->
-    <div class="sidebar-footer">
-      <button
-        @click="logout"
-        class="logout-btn"
-        :class="{ 'logout-btn-collapsed': isCollapsed }"
-        title="Logout"
-      >
-        <span class="logout-icon">➡️</span>
-        <span v-if="!isCollapsed" class="logout-text">Logout</span>
-      </button>
+      <!-- Logout -->
+      <div class="sidebar-footer">
+        <button
+          @click="logout"
+          class="logout-btn"
+          title="Logout"
+        >
+          <span class="logout-icon">➡️</span>
+          <span class="logout-text">Logout</span>
+        </button>
+      </div>
     </div>
   </aside>
 </template>
@@ -52,14 +56,18 @@
 import { ref } from 'vue'
 import { useRouter } from "vue-router";
 
-defineProps({
-  isCollapsed: {
+const props = defineProps({
+  isMobile: {
+    type: Boolean,
+    default: false
+  },
+  isSidebarOpen: {
     type: Boolean,
     default: false
   }
 })
 
-defineEmits(['toggle-collapse'])
+defineEmits(['toggle-sidebar'])
 
 const router = useRouter();
 
@@ -84,22 +92,39 @@ const logout = () => {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 40;
 }
 
-.sidebar-collapsed {
-  width: 80px;
+.sidebar-mobile .sidebar-content {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
 }
 
-/* Hide on mobile */
-@media (max-width: 767px) {
-  .sidebar {
-    display: none;
-  }
+.sidebar-mobile .sidebar-content.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 39;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: white;
+  z-index: 41;
+  position: relative;
 }
 
 /* Logo Section */
@@ -113,11 +138,6 @@ const logout = () => {
   display: flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s ease;
-}
-
-.logo-collapsed {
-  justify-content: center;
 }
 
 .logo-image {
@@ -150,21 +170,21 @@ const logout = () => {
   font-weight: 400;
 }
 
-.sidebar-collapsed .logo-info {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-}
-
 /* Navigation */
 .sidebar-nav {
   flex: 1;
   padding: 20px 16px;
 }
 
-/* .nav-list {
-  space-y: 4px;
-} */
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+  margin-bottom: 4px;
+}
 
 .nav-link {
   display: flex;
@@ -188,11 +208,6 @@ const logout = () => {
   font-weight: 600;
 }
 
-.nav-link-collapsed {
-  justify-content: center;
-  padding: 12px;
-}
-
 .nav-icon {
   font-size: 18px;
   width: 20px;
@@ -204,13 +219,6 @@ const logout = () => {
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: opacity 0.3s ease;
-}
-
-.sidebar-collapsed .nav-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
 }
 
 /* Sidebar Footer */
@@ -238,11 +246,6 @@ const logout = () => {
   color: #dc2626;
 }
 
-.logout-btn-collapsed {
-  justify-content: center;
-  padding: 12px;
-}
-
 .logout-icon {
   font-size: 16px;
   flex-shrink: 0;
@@ -252,12 +255,26 @@ const logout = () => {
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: opacity 0.3s ease;
 }
 
-.sidebar-collapsed .logout-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
+/* Responsive Design */
+@media (max-width: 767px) {
+  .sidebar:not(.sidebar-mobile) {
+    display: none;
+  }
+  
+  .sidebar-mobile .sidebar-content {
+    width: 280px;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar-overlay {
+    display: none;
+  }
+  
+  .sidebar-mobile .sidebar-content {
+    transform: translateX(0);
+  }
 }
 </style>
