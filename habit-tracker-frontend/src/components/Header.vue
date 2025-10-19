@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header-content">
-      <!-- Left Section - Menu Button (Only on mobile) -->
+      <!-- Left Section - Menu Button and Logo -->
       <div class="header-left">
         <button 
           v-if="isMobile"
@@ -19,15 +19,23 @@
           </svg>
         </button>
         
-        <!-- App Name -->
-        <!-- <h1 class="app-name">HabitFlow</h1> -->
+        <!-- App Logo and Name -->
+        <div class="logo-section">
+          <div class="logo-content">
+            <img src="/habit-logo.png" alt="HabitFlow Logo" class="logo-image" />
+            <div class="logo-info">
+              <h1 class="logo-name">HabitFlow</h1>
+              <p class="logo-tagline">Build Better Habits</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Right Section - Notification & Profile -->
       <div class="header-right">
         <!-- Notification Bell -->
         <button class="notification-btn" aria-label="Notifications">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="bell-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path 
               stroke-linecap="round" 
               stroke-linejoin="round" 
@@ -66,9 +74,11 @@ defineEmits(['toggle-sidebar'])
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 30;
+  left: 0;
+  right: 0;
+  z-index: 50;
   height: 70px;
 }
 
@@ -108,11 +118,46 @@ defineEmits(['toggle-sidebar'])
   transform: scale(1.05);
 }
 
-.app-name {
+/* Logo Section in Header */
+.logo-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.logo-info {
   color: white;
-  font-size: 20px;
+}
+
+.logo-name {
+  font-size: 18px;
   font-weight: 700;
   margin: 0;
+  line-height: 1.2;
+}
+
+.logo-tagline {
+  font-size: 12px;
+  opacity: 0.9;
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 400;
 }
 
 /* Right Section */
@@ -141,6 +186,11 @@ defineEmits(['toggle-sidebar'])
 .notification-btn:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
+}
+
+.bell-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .notification-dot {
@@ -197,8 +247,17 @@ defineEmits(['toggle-sidebar'])
     height: 6px;
   }
   
-  .app-name {
-    font-size: 18px;
+  .logo-name {
+    font-size: 16px;
+  }
+  
+  .logo-tagline {
+    font-size: 10px;
+  }
+  
+  .logo-image {
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -215,8 +274,12 @@ defineEmits(['toggle-sidebar'])
     gap: 12px;
   }
   
-  .app-name {
-    font-size: 16px;
+  .logo-name {
+    font-size: 14px;
+  }
+  
+  .logo-tagline {
+    display: none;
   }
 }
 </style>

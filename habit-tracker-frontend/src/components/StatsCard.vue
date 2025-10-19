@@ -60,20 +60,20 @@ const props = defineProps({
 <style scoped>
 .stats-card {
   background: white;
-  border-radius: 20px;
-  padding: 28px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  min-width: 320px;
-  width: 500px;    /* 👈 Set exact width */
-  max-width: 600px; /* 👈 Optional: allow bigger cards */
+  width: 100%;
   height: fit-content;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
 
 .stats-card::before {
   content: '';
@@ -86,8 +86,8 @@ const props = defineProps({
 }
 
 .stats-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .stats-content {
@@ -95,6 +95,7 @@ const props = defineProps({
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 12px;
+  flex: 1;
 }
 
 .stats-text {
@@ -105,14 +106,14 @@ const props = defineProps({
 .stats-title {
   font-size: 14px;
   font-weight: 600;
-  color: #666;
+  color: #6b7280;
   margin: 0 0 8px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .stats-value {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 12px 0;
@@ -120,13 +121,13 @@ const props = defineProps({
 }
 
 .stats-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 20px;
   flex-shrink: 0;
   margin-left: 16px;
 }
@@ -149,14 +150,14 @@ const props = defineProps({
 }
 
 .stats-description {
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
   border-top: 1px solid #f0f0f0;
 }
 
 .stats-description p {
   font-size: 13px;
-  color: #666;
+  color: #6b7280;
   margin: 0;
   line-height: 1.4;
 }
@@ -222,28 +223,8 @@ const props = defineProps({
 /* Responsive Design */
 @media (max-width: 1024px) {
   .stats-card {
-    min-width: 280px;
-    max-width: 320px;
-    padding: 24px;
-  }
-  
-  .stats-value {
-    font-size: 32px;
-  }
-  
-  .stats-icon {
-    width: 52px;
-    height: 52px;
-    font-size: 22px;
-  }
-}
-
-@media (max-width: 768px) {
-  .stats-card {
-    min-width: 240px;
-    max-width: 280px;
     padding: 20px;
-    border-radius: 16px;
+    min-height: 130px;
   }
   
   .stats-value {
@@ -251,21 +232,17 @@ const props = defineProps({
   }
   
   .stats-icon {
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
-  }
-  
-  .stats-content {
-    margin-bottom: 8px;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .stats-card {
-    min-width: 100%;
-    max-width: 100%;
-    padding: 20px;
+    padding: 18px;
+    border-radius: 14px;
+    min-height: 120px;
   }
   
   .stats-value {
@@ -273,13 +250,36 @@ const props = defineProps({
   }
   
   .stats-icon {
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    margin-left: 12px;
   }
   
   .stats-title {
     font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-card {
+    padding: 16px;
+    min-height: 110px;
+  }
+  
+  .stats-value {
+    font-size: 24px;
+  }
+  
+  .stats-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    margin-left: 10px;
+  }
+  
+  .stats-content {
+    margin-bottom: 8px;
   }
 }
 </style>

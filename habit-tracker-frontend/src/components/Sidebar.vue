@@ -9,17 +9,6 @@
     
     <!-- Sidebar Content -->
     <div class="sidebar-content" :class="{ 'sidebar-open': isSidebarOpen }">
-      <!-- Logo Section -->
-      <div class="logo-section">
-        <div class="logo-content">
-          <img src="/habit-logo.png" alt="HabitFlow Logo" class="logo-image" />
-          <div class="logo-info">
-            <h3 class="logo-name">HabitFlow</h3>
-            <p class="logo-tagline">Build Better Habits</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Navigation -->
       <nav class="sidebar-nav">
         <ul class="nav-list">
@@ -125,49 +114,7 @@ const logout = () => {
   background: white;
   z-index: 41;
   position: relative;
-}
-
-/* Logo Section */
-.logo-section {
-  padding: 24px 20px;
-  border-bottom: 1px solid #f3f4f6;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.logo-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-image {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  object-fit: cover;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-}
-
-.logo-info {
-  color: white;
-}
-
-.logo-name {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  line-height: 1.2;
-}
-
-.logo-tagline {
-  font-size: 12px;
-  opacity: 0.9;
-  margin: 0;
-  line-height: 1.2;
-  font-weight: 400;
+  padding-top: 70px; /* Space for header */
 }
 
 /* Navigation */

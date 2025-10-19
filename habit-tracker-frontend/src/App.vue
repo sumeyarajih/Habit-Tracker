@@ -76,6 +76,7 @@ onMounted(() => {
   width: 100%;
   height: 100vh;
   position: relative;
+  display: flex;
 }
 
 /* Full page layout for auth pages */
@@ -120,11 +121,13 @@ onMounted(() => {
 /* Main content area */
 .main-content {
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden; /* Prevent main content from scrolling */
 }
 
 /* Desktop sidebar spacing */
@@ -155,12 +158,22 @@ onMounted(() => {
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px;
-  min-height: calc(100vh - 80px); /* Adjust based on header height */
+  height: calc(100vh - 80px); /* Adjust based on header height */
+  position: relative;
 }
 
 /* Ensure proper scrolling */
 .router-content {
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Fix for mobile scrolling */
+@media (max-width: 767px) {
+  .router-content {
+    height: calc(100vh - 140px); /* Account for header and mobile nav */
+    padding-bottom: 20px;
+  }
 }
 </style>
 
@@ -176,7 +189,7 @@ html, body {
   height: 100%;
   width: 100%;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow: hidden; /* Prevent body scroll */
+  /* REMOVED overflow: hidden - This was preventing scrolling */
 }
 
 #app {
@@ -184,7 +197,7 @@ html, body {
   width: 100vw;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar for router content */
 .router-content::-webkit-scrollbar {
   width: 6px;
 }
@@ -203,6 +216,25 @@ html, body {
   background: #8b5cf6;
 }
 
+/* Custom scrollbar for full page (auth pages) */
+.full-page::-webkit-scrollbar {
+  width: 6px;
+}
+
+.full-page::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.full-page::-webkit-scrollbar-thumb {
+  background: #c4b5fd;
+  border-radius: 4px;
+}
+
+.full-page::-webkit-scrollbar-thumb:hover {
+  background: #8b5cf6;
+}
+
 /* Remove blue highlight on mobile */
 * {
   -webkit-tap-highlight-color: transparent;
@@ -211,5 +243,22 @@ html, body {
 /* Smooth transitions */
 * {
   transition: background-color 0.2s ease;
+}
+
+/* Ensure all pages can scroll properly */
+.page-content {
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+/* Fix for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .router-content {
+    height: -webkit-fill-available;
+  }
+  
+  .main-content {
+    height: -webkit-fill-available;
+  }
 }
 </style>

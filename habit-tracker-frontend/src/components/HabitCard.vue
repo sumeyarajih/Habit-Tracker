@@ -71,11 +71,13 @@ const deleteHabit = () => {
   background: white;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 8px 25px rgba(109, 40, 217, 0.15);
-  border: 2px solid transparent;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 }
 
 .habit-card::before {
@@ -91,8 +93,8 @@ const deleteHabit = () => {
 
 .habit-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(109, 40, 217, 0.25);
-  border-color: #8b5cf6;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: #e5e7eb;
 }
 
 .habit-card-completed {
@@ -165,6 +167,7 @@ const deleteHabit = () => {
 /* Habit Info */
 .habit-info {
   flex: 1;
+  min-width: 0;
 }
 
 .habit-title {
@@ -173,6 +176,7 @@ const deleteHabit = () => {
   color: #1a1a1a;
   margin: 0 0 4px 0;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .habit-title-completed {
@@ -185,6 +189,7 @@ const deleteHabit = () => {
   color: #6b7280;
   margin: 0;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 /* Habit Footer */
@@ -192,12 +197,14 @@ const deleteHabit = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .habit-meta {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 .meta-item {
@@ -206,12 +213,14 @@ const deleteHabit = () => {
   gap: 6px;
   font-size: 12px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .meta-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .streak-dot {
@@ -219,7 +228,7 @@ const deleteHabit = () => {
 }
 
 .frequency-dot {
-  background: #8b5cf6; /* Purple color */
+  background: #8b5cf6;
 }
 
 .streak {
@@ -227,7 +236,7 @@ const deleteHabit = () => {
 }
 
 .frequency {
-  color: #8b5cf6; /* Purple color */
+  color: #8b5cf6;
 }
 
 /* Delete Button */
@@ -240,6 +249,7 @@ const deleteHabit = () => {
   border-radius: 6px;
   transition: all 0.2s ease;
   opacity: 0.6;
+  flex-shrink: 0;
 }
 
 .delete-btn:hover {

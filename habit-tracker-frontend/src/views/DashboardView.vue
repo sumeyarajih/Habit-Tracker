@@ -1,35 +1,41 @@
 <template>
   <div class="dashboard-wrapper">
+    <!-- Header Spacer -->
+    <div class="header-spacer"></div>
+    
     <div class="dashboard-container">
       <!-- Stats Cards -->
       <div class="stats-section">
         <div class="stats-grid">
           <!-- Current Streak -->
-          <div class="stat-card">
-            <div class="stat-header">
-              <h3 class="stat-title">Current Streak</h3>
-              <div class="stat-icon streak-icon">🔥</div>
-            </div>
-            <p class="stat-value">{{ currentStreak }} days</p>
-          </div>
+          <StatsCard
+            title="Current Streak"
+            :value="currentStreak + ' days'"
+            icon="🔥"
+            iconBgColor="stats-card-orange"
+            trend="+2 days"
+            trendColor="trend-positive"
+          />
 
           <!-- Completion Rate -->
-          <div class="stat-card">
-            <div class="stat-header">
-              <h3 class="stat-title">Completion Rate</h3>
-              <div class="stat-icon completion-icon">📈</div>
-            </div>
-            <p class="stat-value">{{ completionRate }}%</p>
-          </div>
+          <StatsCard
+            title="Completion Rate"
+            :value="completionRate + '%'"
+            icon="📈"
+            iconBgColor="stats-card-green"
+            trend="+5%"
+            trendColor="trend-positive"
+          />
 
           <!-- Total Habits -->
-          <div class="stat-card">
-            <div class="stat-header">
-              <h3 class="stat-title">Total Habits</h3>
-              <div class="stat-icon habits-icon">📝</div>
-            </div>
-            <p class="stat-value">{{ totalHabits }}</p>
-          </div>
+          <StatsCard
+            title="Total Habits"
+            :value="totalHabits"
+            icon="📝"
+            iconBgColor="stats-card-blue"
+            trend="+1"
+            trendColor="trend-positive"
+          />
         </div>
       </div>
 
@@ -62,6 +68,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import HabitCard from '../components/HabitCard.vue'
+import StatsCard from '../components/StatsCard.vue'
 
 // Mock data
 const currentStreak = ref(12)
@@ -129,12 +136,18 @@ const todayHabits = ref([
   overflow-y: auto;
 }
 
+/* Header spacer to account for fixed header */
+.header-spacer {
+  height: 70px; /* Same as header height */
+  width: 100%;
+}
+
 /* Main container */
 .dashboard-container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  min-height: 100vh;
+  padding: 30px 20px 20px;
+  min-height: calc(100vh - 70px);
 }
 
 /* Stats Section */
@@ -144,70 +157,9 @@ const todayHabits = ref([
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.stat-card {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 25px rgba(109, 40, 217, 0.15);
-  border: 1px solid #e9d5ff;
-  transition: all 0.3s ease;
-  width: 200px
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 35px rgba(109, 40, 217, 0.25);
-}
-
-.stat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 12px;
-}
-
-.stat-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #6d28d9;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-}
-
-.stat-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.streak-icon {
-  background: linear-gradient(135deg, #fed7aa, #fdba74);
-}
-
-.completion-icon {
-  background: linear-gradient(135deg, #bbf7d0, #86efac);
-}
-
-.habits-icon {
-  background: linear-gradient(135deg, #c7d2fe, #a5b4fc);
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0;
-  line-height: 1;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
 }
 
 /* Habits Section */
@@ -273,22 +225,31 @@ const todayHabits = ref([
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-container {
+    max-width: 900px;
+    padding: 25px 20px 20px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .header-spacer {
+    height: 70px;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
-    padding: 16px;
+    padding: 20px 16px 16px;
+    max-width: 100%;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 16px;
-  }
-
-  .stat-card {
-    padding: 20px;
-  }
-
-  .stat-value {
-    font-size: 28px;
   }
 
   .section-title {
@@ -302,19 +263,19 @@ const todayHabits = ref([
   .quote-text {
     font-size: 16px;
   }
+  
+  .header-spacer {
+    height: 70px;
+  }
 }
 
 @media (max-width: 480px) {
   .dashboard-container {
-    padding: 12px;
+    padding: 15px 12px 12px;
   }
 
-  .stat-card {
-    padding: 16px;
-  }
-
-  .stat-value {
-    font-size: 24px;
+  .stats-grid {
+    gap: 12px;
   }
 
   .quote-card {
@@ -323,6 +284,10 @@ const todayHabits = ref([
 
   .quote-text {
     font-size: 15px;
+  }
+  
+  .header-spacer {
+    height: 70px;
   }
 }
 

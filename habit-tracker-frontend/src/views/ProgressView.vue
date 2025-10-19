@@ -66,14 +66,16 @@ const habitsStore = useHabitsStore()
 .progress-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 20px;
-  min-height: 100vh;
+  padding: 20px;
+  min-height: calc(100vh - 140px); /* Account for header */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow-y: auto;
 }
 
 /* Header Styles */
 .header {
   margin-bottom: 32px;
+  padding-top: 20px;
 }
 
 .title {
@@ -94,7 +96,7 @@ const habitsStore = useHabitsStore()
 /* Progress Grid */
 .progress-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 24px;
   margin-bottom: 40px;
 }
@@ -138,9 +140,11 @@ const habitsStore = useHabitsStore()
 }
 
 /* Habits Progress */
-/* .habits-progress {
-  space-y: 16px;
-} */
+.habits-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .habit-progress-item {
   display: flex;
@@ -164,6 +168,8 @@ const habitsStore = useHabitsStore()
   font-size: 14px;
   font-weight: 500;
   color: #1a1a1a;
+  flex: 1;
+  margin-right: 12px;
 }
 
 .habit-streak {
@@ -173,6 +179,7 @@ const habitsStore = useHabitsStore()
   background: #f0f4ff;
   padding: 4px 8px;
   border-radius: 12px;
+  white-space: nowrap;
 }
 
 /* Progress Bar */
@@ -228,14 +235,31 @@ const habitsStore = useHabitsStore()
 /* Habits Grid */
 .habits-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .progress-container {
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+  
+  .progress-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
   .progress-container {
-    padding: 20px 16px;
+    padding: 16px;
+    min-height: calc(100vh - 120px);
+  }
+  
+  .header {
+    margin-bottom: 24px;
+    padding-top: 10px;
   }
   
   .title {
@@ -263,11 +287,16 @@ const habitsStore = useHabitsStore()
   .calendar-icon {
     font-size: 40px;
   }
+  
+  .section-title {
+    font-size: 22px;
+  }
 }
 
 @media (max-width: 480px) {
   .progress-container {
-    padding: 16px 12px;
+    padding: 12px;
+    min-height: calc(100vh - 100px);
   }
   
   .title {
@@ -284,6 +313,37 @@ const habitsStore = useHabitsStore()
   
   .progress-card {
     padding: 16px;
+  }
+  
+  .calendar-placeholder {
+    padding: 24px 12px;
+  }
+  
+  .calendar-icon {
+    font-size: 36px;
+  }
+  
+  .habit-name {
+    font-size: 13px;
+  }
+  
+  .habit-streak {
+    font-size: 11px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .progress-container {
+    padding: 8px;
+  }
+  
+  .progress-card {
+    padding: 12px;
+  }
+  
+  .habits-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
